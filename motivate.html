@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4a148c">
+    <title>Daily Motivation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #7b1fa2;
+            --secondary-color: #f3e5f5;
+            --text-color: #333;
+            --bg-color: #ffffff;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            user-select: none;
+            transition: all 0.5s ease;
+            color: var(--text-color);
+        }
+        
+        .container {
+            padding: 2rem;
+            max-width: 90%;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .quote-box {
+            background-color: var(--bg-color);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 2px solid var(--primary-color);
+        }
+        
+        .quote {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            margin: 0.5rem;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1.5rem;
+            border-radius: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .notification-btn {
+            background-color: #4caf50;
+        }
+        
+        .theme-btn {
+            background-color: #2196f3;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .quote {
+                font-size: 1.3rem;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-icon">✨</div>
+    <div class="container">
+        <h1 id="greeting">Daily Motivation</h1>
+        <div class="quote-box">
+            <p class="quote fade-in" id="quote">Tap below for your daily dose of motivation!</p>
+        </div>
+        <div class="controls">
+            <button id="newQuote">New Motivation</button>
+            <button class="notification-btn" id="enableNotifications">Enable 6 AM Notifications</button>
+            <button class="theme-btn" id="changeTheme">Change Theme</button>
+        </div>
+    </div>
+
+    <script>
+        // Motivational quotes
+        const quotes = [
+            "You're capable of amazing things - I've seen it before and I believe in you now!",
+            "This tough moment? It's just preparing you for something wonderful!",
+            "One small step today is a giant leap for your future self!",
+            "You're not just dreaming - you're doing the work to make it real!",
+            "Every challenge you face is shaping you into who you're meant to be!",
+            "Your persistence is inspiring people you haven't even met yet!",
+            "You're not just getting through the day - you're building your future!",
+            "That fire inside you? It's still burning - fan those flames today!",
+            "You're allowed to be tired, but you're not allowed to give up!",
+            "The world needs what only YOU can create - keep going!",
+            "Your effort today is love letters to your future self!",
+            "You're not stuck - you're just in preparation mode for greatness!",
+            "Every expert was once a beginner - you're right on schedule!",
+            "Your courage is stronger than your fear - I see it in you!",
+            "You're not just working hard - you're loving yourself enough to grow!",
+            "The seeds you're planting today will bloom beautifully tomorrow!",
+            "You're not falling behind - you're gathering strength!",
+            "Your discipline today is your freedom tomorrow!",
+            "You're not just pushing through - you're breaking through!",
+            "Every small win is a step toward your big victory!"
+        ];
+
+        // UI Themes
+        const themes = [
+            {
+                name: "Purple Power",
+                primary: "#7b1fa2",
+                secondary: "#f3e5f5",
+                text: "#333",
+                bg: "#ffffff"
+            },
+            {
+                name: "Ocean Calm",
+                primary: "#2196f3",
+                secondary: "#e3f2fd",
+                text: "#263238",
+                bg: "#ffffff"
+            },
+            {
+                name: "Sunshine",
+                primary: "#ff9800",
+                secondary: "#fff3e0",
+                text: "#3e2723",
+                bg: "#ffffff"
+            },
+            {
+                name: "Emerald",
+                primary: "#4caf50",
+                secondary: "#e8f5e9",
+                text: "#1b5e20",
+                bg: "#ffffff"
+            },
+            {
+                name: "Sunset",
+                primary: "#e91e63",
+                secondary: "#fce4ec",
+                text: "#4a148c",
+                bg: "#ffffff"
+            },
+            {
+                name: "Midnight",
+                primary: "#673ab7",
+                secondary: "#ede7f6",
+                text: "#311b92",
+                bg: "#ffffff"
+            }
+        ];
+
+        // DOM Elements
+        const quoteElement = document.getElementById('quote');
+        const newQuoteButton = document.getElementById('newQuote');
+        const notificationButton = document.getElementById('enableNotifications');
+        const themeButton = document.getElementById('changeTheme');
+        const greetingElement = document.getElementById('greeting');
+
+        // Time-based greeting
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting;
+            
+            if (hour < 12) greeting = "Good Morning";
+            else if (hour < 18) greeting = "Good Afternoon";
+            else greeting = "Good Evening";
+            
+            greetingElement.textContent = `${greeting}, Champion!`;
+        }
+
+        // Get random quote
+        function getRandomQuote() {
+            return quotes[Math.floor(Math.random() * quotes.length)];
+        }
+
+        // Apply theme
+        function applyTheme(theme) {
+            document.documentElement.style.setProperty('--primary-color', theme.primary);
+            document.documentElement.style.setProperty('--secondary-color', theme.secondary);
+            document.documentElement.style.setProperty('--text-color', theme.text);
+            document.documentElement.style.setProperty('--bg-color', theme.bg);
+        }
+
+        // Change theme randomly
+        function changeTheme() {
+            const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+            applyTheme(randomTheme);
+            return randomTheme.name;
+        }
+
+        // Display new quote with animation
+        function displayQuote() {
+            quoteElement.classList.remove('fade-in');
+            void quoteElement.offsetWidth; // Trigger reflow
+            quoteElement.classList.add('fade-in');
+            quoteElement.textContent = getRandomQuote();
+        }
+
+        // Notification permission and scheduling
+        async function enableNotifications() {
+            if (!('Notification' in window)) {
+                alert("This browser doesn't support notifications");
+                return;
+            }
+            
+            if (Notification.permission === 'granted') {
+                scheduleDailyNotification();
+                return;
+            }
+            
+            const permission = await Notification.requestPermission();
+            
+            if (permission === 'granted') {
+                scheduleDailyNotification();
+                notificationButton.textContent = "Notifications Enabled!";
+                setTimeout(() => {
+                    notificationButton.textContent = "Enable 6 AM Notifications";
+                }, 3000);
+            }
+        }
+
+        function scheduleDailyNotification() {
+            if (!('serviceWorker' in navigator)) return;
+            
+            // Register service worker
+            navigator.serviceWorker.register('sw.js').then(registration => {
+                console.log('Service Worker registered');
+                
+                // Calculate time until next 6 AM
+                const now = new Date();
+                const target = new Date();
+                
+                // If it's already past 6 AM, schedule for next day
+                if (now.getHours() >= 6) {
+                    target.setDate(target.getDate() + 1);
+                }
+                
+                target.setHours(6, 0, 0, 0);
+                
+                const timeUntilNotification = target.getTime() - now.getTime();
+                
+                // Schedule notification
+                setTimeout(() => {
+                    sendNotification();
+                    // Repeat every 24 hours
+                    setInterval(sendNotification, 24 * 60 * 60 * 1000);
+                }, timeUntilNotification);
+            });
+        }
+
+        function sendNotification() {
+            const quote = getRandomQuote();
+            const options = {
+                body: quote,
+                icon: '/icon-192x192.png',
+                badge: '/badge.png',
+                vibrate: [200, 100, 200],
+                data: { url: window.location.href }
+            };
+            
+            if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'SEND_NOTIFICATION',
+                    quote: quote,
+                    options: options
+                });
+            }
+        }
+
+        // Event Listeners
+        newQuoteButton.addEventListener('click', displayQuote);
+        notificationButton.addEventListener('click', enableNotifications);
+        themeButton.addEventListener('click', () => {
+            const themeName = changeTheme();
+            themeButton.textContent = `Theme: ${themeName}`;
+            setTimeout(() => {
+                themeButton.textContent = "Change Theme";
+            }, 2000);
+        });
+
+        // Initialize
+        updateGreeting();
+        displayQuote();
+        changeTheme();
+
+        // PWA Installation
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            // You can show your own install button here if needed
+            console.log('PWA installable');
+        });
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
